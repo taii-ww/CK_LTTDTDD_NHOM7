@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="24dp">
+
+        <TextView
+            android:id="@+id/textGreet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/green_dark"
+            android:text="Chào buổi sáng"
+            android:layout_marginBottom="16dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="28dp"
+            app:cardBackgroundColor="@color/white">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="19dp"
+                android:paddingTop="35dp"
+                android:paddingBottom="19dp">
+
+                <TextView
+                    android:id="@+id/Homnayangi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hôm nay ăn gì"
+                    android:textColor="@color/gray_dark"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Cho chúng tôi biết tủ lạnh hôm nay có gì"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/Homnayangi" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:srcCompat="@drawable/ic_fooddome"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/textView3"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayoutIngredients"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:hintEnabled="false"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxStrokeColor="@color/gray_light"
+                    app:startIconDrawable="@drawable/ic_search"
+                    app:startIconTint="@color/green_dark"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_add"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView3">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextIngredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tìm nguyên liệu..."
+                        android:inputType="text" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupIngredients"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayoutIngredients">
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/addIngredientsToFridge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:icon="@drawable/ic_add"
+                    android:text="+ Thêm nguyên liệu vào tủ"
+                    android:textColor="@color/green_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/chipGroupIngredients"/>
+
+                <Button
+                    android:id="@+id/btnScan"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:backgroundTint="@color/green_light"
+                    android:text="Quét nguyên liệu"
+                    android:textColor="@color/green_dark"
+                    android:layout_marginTop="16dp"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_camera"
+                    app:iconTint="@color/green_dark"
+                    app:strokeColor="@color/green_dark"
+                    app:strokeWidth="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/addIngredientsToFridge"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+        
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DÀNH RIÊNG CHO BẠN"
+            android:textColor="@color/green_dark"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gợi ý hôm nay"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSuggestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:clipToPadding="false" />
+    </LinearLayout>
+
+</LinearLayout>
