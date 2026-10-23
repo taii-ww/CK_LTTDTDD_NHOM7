@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ute.cuuhotulanh.R
 import com.ute.cuuhotulanh.model.Recipe
 
-class RecipeAdapter (private val recipes: List<Recipe>) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
+class RecipeAdapter (private val recipes: List<Recipe>,private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
+
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView = itemView.findViewById<ImageView>(R.id.imageRecipe)
         val tvRecipeName = itemView.findViewById<TextView>(R.id.tvRecipeName)
@@ -29,6 +30,9 @@ class RecipeAdapter (private val recipes: List<Recipe>) : RecyclerView.Adapter<R
         holder.tvTime.text = "${recipe.time} phút"
         holder.tvIngredientEnough.text = recipe.ingredientEnough
         holder.tvIngredientMiss.text = recipe.ingredientMiss
+        holder.itemView.setOnClickListener {
+            onItemClick(recipe.id)
+        }
     }
     override fun getItemCount(): Int {
         return recipes.size

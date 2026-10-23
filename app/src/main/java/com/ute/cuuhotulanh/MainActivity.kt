@@ -47,28 +47,4 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
-    private fun navigateToRecipeDetail(id : Int){
-        val fragment = RecipeDetailFragment()
-
-        val bundle = Bundle()
-        bundle.putInt("id", id)
-        fragment.arguments = bundle
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-    private fun navigateToRecipeList(ingredients : List<String>){
-        val fragment = RecipeListFragment()
-
-        val bundle = Bundle()
-        bundle.putStringArrayList("ingredients", ArrayList(ingredients))
-        fragment.arguments = bundle
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
 }
