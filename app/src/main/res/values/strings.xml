@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">CuuHoTuLanh</string>
+    <string name="back">Quay lại</string>
     <string name="ingredient_icon">Biểu tượng nguyên liệu</string>
 
 
