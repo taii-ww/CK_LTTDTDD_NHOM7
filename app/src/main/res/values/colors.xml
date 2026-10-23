@@ -14,4 +14,6 @@
     <color name="stroke_light">#DCE6D8</color>
     <color name="gray_light">#E2E8F0</color>
     <color name="dark">#000000</color>
+    <color name="fridge_green">#4A6B3F</color>
+    <color name="fridge_stroke">#CFE3C8</color>
 </resources>
