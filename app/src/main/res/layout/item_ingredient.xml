@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@android:color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="10dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/ingredientIconContainer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="14dp"
+            app:cardBackgroundColor="@color/green_light"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/ivIngredientIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:src="@drawable/img_food"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/ingredient_icon" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tvIngredientName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Trứng gà"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/gray_dark"
+            app:layout_constraintStart_toEndOf="@id/ingredientIconContainer"
+            app:layout_constraintEnd_toStartOf="@id/ivArrow"
+            app:layout_constraintTop_toTopOf="@id/ingredientIconContainer" />
+
+        <TextView
+            android:id="@+id/tvIngredientMeta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:text="3 quả · Còn 5 ngày"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            app:layout_constraintStart_toEndOf="@id/ingredientIconContainer"
+            app:layout_constraintEnd_toStartOf="@id/ivArrow"
+            app:layout_constraintTop_toBottomOf="@id/tvIngredientName" />
+
+        <TextView
+            android:id="@+id/tvUseSoon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="5dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp"
+            android:text="Nên dùng sớm"
+            android:textSize="10sp"
+            android:textColor="@color/orange"
+            android:background="@drawable/bg_orange_tag"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/ingredientIconContainer"
+            app:layout_constraintTop_toBottomOf="@id/tvIngredientMeta" />
+
+        <ImageView
+            android:id="@+id/ivArrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_arrow_right"
+            app:tint="@color/gray_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

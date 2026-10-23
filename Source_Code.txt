@@ -1,0 +1,1167 @@
+﻿========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\MainActivity.kt
+========================================
+package com.ute.cuuhotulanh
+
+import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import com.ute.cuuhotulanh.databinding.ActivityMainBinding
+import com.ute.cuuhotulanh.ui.FavoritesFragment
+import com.ute.cuuhotulanh.ui.FridgeFragment
+import com.ute.cuuhotulanh.ui.home.HomeFragment
+import com.ute.cuuhotulanh.ui.RecipeDetailFragment
+import com.ute.cuuhotulanh.ui.RecipeListFragment
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
+        }
+
+        if (savedInstanceState == null) showFragment(HomeFragment())
+
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> showFragment(HomeFragment())
+                R.id.nav_fridge -> showFragment(FridgeFragment())
+                R.id.nav_favorite -> showFragment(FavoritesFragment())
+                else -> return@setOnItemSelectedListener false
+            }
+            true
+        }
+    }
+
+    private fun showFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
+    }
+}
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\model\Ingredient.kt
+========================================
+package com.ute.cuuhotulanh.model
+
+data class Ingredient(
+    val name: String,
+    val quantity: Int,
+    val unit: String,
+    val expiry: String,
+    val shouldUseSoon: Boolean = false,
+    val imageRes: Int
+)
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\model\Recipe.kt
+========================================
+package com.ute.cuuhotulanh.model
+
+import com.ute.cuuhotulanh.R
+
+data class Recipe(
+    val id: Int,
+    val name: String,
+    val image:Int ,
+    val time: Int,
+    val ingredientEnough: String,
+    val ingredientMiss: String
+)
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\ui\FavoritesFragment.kt
+========================================
+package com.ute.cuuhotulanh.ui
+
+import androidx.fragment.app.Fragment
+import com.ute.cuuhotulanh.R
+
+class FavoritesFragment : Fragment(R.layout.fragment_placeholder)
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\ui\FridgeFragment.kt
+========================================
+package com.ute.cuuhotulanh.ui
+
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ute.cuuhotulanh.R
+import com.ute.cuuhotulanh.model.Ingredient
+
+class FridgeFragment : Fragment(R.layout.fragment_fridge) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val ingredients = listOf(
+            Ingredient(
+                name = "Trứng gà",
+                quantity = 3,
+                unit = "quả",
+                expiry = "Còn 5 ngày",
+                shouldUseSoon = true,
+                imageRes = R.drawable.img_food
+            ),
+            Ingredient(
+                name = "Cà chua",
+                quantity = 4,
+                unit = "quả",
+                expiry = "Nên dùng sớm",
+                shouldUseSoon = true,
+                imageRes = R.drawable.img_food
+            ),
+            Ingredient(
+                name = "Thịt gà",
+                quantity = 350,
+                unit = "gram",
+                expiry = "Còn 8 ngày",
+                imageRes = R.drawable.img_food
+            ),
+            Ingredient(
+                name = "Cải xanh",
+                quantity = 1,
+                unit = "bó",
+                expiry = "Còn 2 ngày",
+                imageRes = R.drawable.img_food
+            ),
+            Ingredient(
+                name = "Hành tây",
+                quantity = 2,
+                unit = "củ",
+                expiry = "Còn 3 ngày",
+                imageRes = R.drawable.img_food
+            ),
+            Ingredient(
+                name = "Bắp cải",
+                quantity = 1,
+                unit = "củ",
+                expiry = "Còn 4 ngày",
+                imageRes = R.drawable.img_food
+            )
+        )
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.rvIngredients)
+        requireNotNull(recyclerView) { "rvIngredients không tồn tại trong fragment_fridge.xml" }
+
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = IngredientAdapter(ingredients)
+    }
+}
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\ui\IngredientAdapter.kt
+========================================
+package com.ute.cuuhotulanh.ui
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.ute.cuuhotulanh.R
+import com.ute.cuuhotulanh.model.Ingredient
+
+class IngredientAdapter(
+    private val ingredients: List<Ingredient>
+) : RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>() {
+
+    class IngredientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val ivIcon: ImageView = itemView.findViewById(R.id.ivIngredientIcon)
+        val tvName: TextView = itemView.findViewById(R.id.tvIngredientName)
+        val tvMeta: TextView = itemView.findViewById(R.id.tvIngredientMeta)
+        val tvUseSoon: TextView = itemView.findViewById(R.id.tvUseSoon)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_ingredient, parent, false)
+        return IngredientViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
+        val ingredient = ingredients[position]
+
+        holder.ivIcon.setImageResource(ingredient.imageRes)
+        holder.tvName.text = ingredient.name
+        holder.tvMeta.text = "${ingredient.quantity} ${ingredient.unit} · ${ingredient.expiry}"
+
+        if (ingredient.shouldUseSoon) {
+            holder.tvUseSoon.visibility = View.VISIBLE
+        } else {
+            holder.tvUseSoon.visibility = View.GONE
+        }
+    }
+
+    override fun getItemCount(): Int = ingredients.size
+}
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\ui\RecipeDetailFragment.kt
+========================================
+package com.ute.cuuhotulanh.ui
+
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.Fragment
+import com.ute.cuuhotulanh.R
+class RecipeDetailFragment : Fragment(R.layout.fragment_recipe_detail) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<View>(R.id.btnBack).setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+    }
+
+}
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\ui\RecipeListFragment.kt
+========================================
+package com.ute.cuuhotulanh.ui
+
+import androidx.fragment.app.Fragment
+import com.ute.cuuhotulanh.R
+
+class RecipeListFragment : Fragment(R.layout.fragment_recipe_list) {
+}
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\ui\home\HomeFragment.kt
+========================================
+package com.ute.cuuhotulanh.ui.home
+
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import com.ute.cuuhotulanh.MainActivity
+import com.ute.cuuhotulanh.R
+import com.ute.cuuhotulanh.model.Recipe
+import com.ute.cuuhotulanh.ui.RecipeDetailFragment
+import com.ute.cuuhotulanh.ui.RecipeListFragment
+
+class HomeFragment : Fragment(R.layout.fragment_home){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val listRecipe: List<Recipe> = listOf(
+            Recipe(
+                1,
+                "Trứng xào cà chua",
+                R.drawable.img_food,
+                13,
+                "Có 3 nguyên liệu",
+                "Có 3 nguyên liệu"
+            ),
+            Recipe(
+                2,
+                "Bún đậu mắm tôm",
+                R.drawable.img_food,
+                13,
+                "Có 3 nguyên liệu",
+                "Có 3 nguyên liệu"
+            ),
+            Recipe(
+                3,
+                "Bánh mì chảo",
+                R.drawable.img_food,
+                13,
+                "Có 3 nguyên liệu",
+                "Có 3 nguyên liệu"
+            ),
+            Recipe(
+                4,
+                "Bánh mì chảo",
+                R.drawable.img_food,
+                13,
+                "Có 3 nguyên liệu",
+                "Có 3 nguyên liệu"
+            ),
+        )
+        val adapter = RecipeAdapter(listRecipe){ selectedId ->
+            navigateToRecipeDetail(selectedId)
+        }
+        view.findViewById<RecyclerView>(R.id.rvSuggestions).adapter = adapter
+    }
+    private fun navigateToRecipeDetail(id : Int){
+        val fragment = RecipeDetailFragment()
+
+        val bundle = Bundle()
+        bundle.putInt("id", id)
+        fragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+    private fun navigateToRecipeList(ingredients : List<String>){
+        val fragment = RecipeListFragment()
+
+        val bundle = Bundle()
+        bundle.putStringArrayList("ingredients", ArrayList(ingredients))
+        fragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+}
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\ui\home\RecipeAdapter.kt
+========================================
+package com.ute.cuuhotulanh.ui.home
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.ute.cuuhotulanh.R
+import com.ute.cuuhotulanh.model.Recipe
+
+class RecipeAdapter (private val recipes: List<Recipe>,private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
+
+    class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val imageView = itemView.findViewById<ImageView>(R.id.imageRecipe)
+        val tvRecipeName = itemView.findViewById<TextView>(R.id.tvRecipeName)
+        val tvTime = itemView.findViewById<TextView>(R.id.tvTime)
+        val tvIngredientEnough = itemView.findViewById<TextView>(R.id.tvIngredientStatusEnough)
+        val tvIngredientMiss = itemView.findViewById<TextView>(R.id.tvIngredientStatusMiss)
+    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
+        val view = LayoutInflater.from(parent.context).
+        inflate(R.layout.item_recipe, parent, false)
+        return RecipeViewHolder(view)
+    }
+    override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
+        val recipe = recipes[position]
+        holder.imageView?.setImageResource(recipe.image)
+        holder.tvRecipeName.text = recipe.name
+        holder.tvTime.text = "${recipe.time} phút"
+        holder.tvIngredientEnough.text = recipe.ingredientEnough
+        holder.tvIngredientMiss.text = recipe.ingredientMiss
+        holder.itemView.setOnClickListener {
+            onItemClick(recipe.id)
+        }
+    }
+    override fun getItemCount(): Int {
+        return recipes.size
+    }
+}
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\java\com\ute\cuuhotulanh\util\Extensions.kt
+========================================
+// util/Extensions.kt
+package com.ute.cuuhotulanh.util
+
+import android.content.Context
+import android.view.View
+import android.widget.Toast
+
+fun View.show() { visibility = View.VISIBLE }
+fun View.gone() { visibility = View.GONE }
+fun Context.toast(message: String) =
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\res\layout\activity_main.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cream_bg">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:name="com.ute.cuuhotulanh.ui.home.HomeFragment" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:itemActiveIndicatorStyle="@style/App.ActiveIndicator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\res\layout\fragment_favorites.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Đang xây dựng..."
+        android:textColor="@color/text_secondary"/>
+</LinearLayout>
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\res\layout\fragment_fridge.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="88dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Header -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvFridgeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyên liệu"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvFridgeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Tủ lạnh của tôi"
+                    android:textColor="@color/gray_dark"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvFridgeLabel" />
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_pot"
+                    app:layout_constraintBottom_toBottomOf="@id/tvFridgeTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvFridgeLabel" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Thẻ xanh tổng quan -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/fridge_green"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardFridgeIcon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardBackgroundColor="#26FFFFFF"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_fridge" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/tvTotalIngredients"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="12 nguyên liệu"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@id/tvUseSoon"
+                        app:layout_constraintStart_toEndOf="@id/cardFridgeIcon"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/tvUseSoon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="2dp"
+                        android:alpha="0.8"
+                        android:text="3 món nên dùng sớm"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cardFridgeIcon"
+                        app:layout_constraintTop_toBottomOf="@id/tvTotalIngredients" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:strokeColor="#66FFFFFF"
+                        app:strokeWidth="3dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Chip danh mục cuộn ngang -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAll"
+                        style="@style/App.Chip.Category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Tất cả" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipVegetable"
+                        style="@style/App.Chip.Category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rau củ" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipFish"
+                        style="@style/App.Chip.Category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cá" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipEgg"
+                        style="@style/App.Chip.Category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Trứng" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipMeat"
+                        style="@style/App.Chip.Category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thịt" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipFruit"
+                        style="@style/App.Chip.Category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Trái cây" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+
+            <!-- Danh sách -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Thêm gần đây"
+                android:textColor="@color/gray_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Nút nổi -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/btnAddIngredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:text="Thêm nguyên liệu"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/fridge_green"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@color/white" />
+</FrameLayout>
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\res\layout\fragment_home.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="24dp">
+
+        <TextView
+            android:id="@+id/textGreet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/green_dark"
+            android:text="Chào buổi sáng"
+            android:layout_marginBottom="16dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="28dp"
+            app:cardBackgroundColor="@color/white">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="19dp"
+                android:paddingTop="35dp"
+                android:paddingBottom="19dp">
+
+                <TextView
+                    android:id="@+id/Homnayangi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hôm nay ăn gì"
+                    android:textColor="@color/gray_dark"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Cho chúng tôi biết tủ lạnh hôm nay có gì"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/Homnayangi" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:srcCompat="@drawable/ic_fooddome"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/textView3"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayoutIngredients"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:hintEnabled="false"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxStrokeColor="@color/gray_light"
+                    app:startIconDrawable="@drawable/ic_search"
+                    app:startIconTint="@color/green_dark"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_add"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView3">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextIngredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tìm nguyên liệu..."
+                        android:inputType="text" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupIngredients"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayoutIngredients">
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/addIngredientsToFridge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:icon="@drawable/ic_add"
+                    android:text="+ Thêm nguyên liệu vào tủ"
+                    android:textColor="@color/green_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/chipGroupIngredients"/>
+
+                <Button
+                    android:id="@+id/btnScan"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:backgroundTint="@color/green_light"
+                    android:text="Quét nguyên liệu"
+                    android:textColor="@color/green_dark"
+                    android:layout_marginTop="16dp"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_camera"
+                    app:iconTint="@color/green_dark"
+                    app:strokeColor="@color/green_dark"
+                    app:strokeWidth="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/addIngredientsToFridge"/>
+
+                <Button
+                    android:id="@+id/btnSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:backgroundTint="@color/green_light"
+                    android:text="Tìm món ăn"
+                    android:textColor="@color/green_dark"
+                    android:layout_marginTop="16dp"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_search"
+                    app:iconTint="@color/green_dark"
+                    app:strokeColor="@color/green_dark"
+                    app:strokeWidth="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnScan"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+        
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DÀNH RIÊNG CHO BẠN"
+            android:textColor="@color/green_dark"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gợi ý hôm nay"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSuggestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            android:clipToPadding="false" />
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\res\layout\fragment_placeholder.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Đang xây dựng..."
+        android:textColor="@color/text_secondary"/>
+</FrameLayout>
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\res\layout\fragment_recipe_detail.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            app:cardCornerRadius="18dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:src="@drawable/ic_back"
+                app:tint="@color/dark" />
+
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\res\layout\fragment_recipe_list.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</LinearLayout>
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\res\layout\item_ingredient.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@android:color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="10dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/ingredientIconContainer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="14dp"
+            app:cardBackgroundColor="@color/green_light"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/ivIngredientIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:src="@drawable/img_food"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/ingredient_icon" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tvIngredientName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Trứng gà"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/gray_dark"
+            app:layout_constraintStart_toEndOf="@id/ingredientIconContainer"
+            app:layout_constraintEnd_toStartOf="@id/ivArrow"
+            app:layout_constraintTop_toTopOf="@id/ingredientIconContainer" />
+
+        <TextView
+            android:id="@+id/tvIngredientMeta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:text="3 quả · Còn 5 ngày"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            app:layout_constraintStart_toEndOf="@id/ingredientIconContainer"
+            app:layout_constraintEnd_toStartOf="@id/ivArrow"
+            app:layout_constraintTop_toBottomOf="@id/tvIngredientName" />
+
+        <TextView
+            android:id="@+id/tvUseSoon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="5dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp"
+            android:text="Nên dùng sớm"
+            android:textSize="10sp"
+            android:textColor="@color/orange"
+            android:background="@drawable/bg_orange_tag"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/ingredientIconContainer"
+            app:layout_constraintTop_toBottomOf="@id/tvIngredientMeta" />
+
+        <ImageView
+            android:id="@+id/ivArrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_arrow_right"
+            app:tint="@color/gray_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+
+
+
+========================================
+FILE: D:\CK_DIDONG_NHOM7\app\src\main\res\layout\item_recipe.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginEnd="16dp"
+    app:cardCornerRadius="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageRecipe"
+            android:layout_width="250dp"
+            android:layout_height="130dp"
+            android:src="@drawable/img_food"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvRecipeName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Trứng xào cà chua"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/gray_dark"
+            android:layout_marginStart="12dp"
+            app:layout_constraintTop_toBottomOf="@id/imageRecipe"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13 phút"
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="16dp"
+            android:drawableStart="@drawable/ic_clock"
+            android:drawableTint="@color/gray_dark"
+            android:drawablePadding="4dp"
+            app:layout_constraintTop_toBottomOf="@id/tvRecipeName"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/dark"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="12dp"
+            app:layout_constraintTop_toBottomOf="@id/tvTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tvIngredientStatusEnough"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Có 3 nguyên liệu"
+            android:textSize="11sp"
+            android:textColor="@color/green_dark"
+            android:textStyle="bold"
+            android:drawableStart="@drawable/ic_check"
+            android:drawableTint="@color/green_dark"
+            android:drawablePadding="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginHorizontal="12dp"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvIngredientStatusMiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:drawableStart="@drawable/ic_add"
+            android:drawablePadding="4dp"
+            android:drawableTint="@color/orange"
+            android:text="Có 3 nguyên liệu"
+            android:textColor="@color/orange"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvIngredientStatusEnough"
+            app:layout_constraintTop_toBottomOf="@id/divider"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+
+
+
