@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:name="com.ute.cuuhotulanh.ui.HomeFragment" />
+        android:name="com.ute.cuuhotulanh.ui.home.HomeFragment" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

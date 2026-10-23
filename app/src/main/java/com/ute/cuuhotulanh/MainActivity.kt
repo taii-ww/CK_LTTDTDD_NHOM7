@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.ute.cuuhotulanh.databinding.ActivityMainBinding
 import com.ute.cuuhotulanh.ui.FavoritesFragment
 import com.ute.cuuhotulanh.ui.FridgeFragment
-import com.ute.cuuhotulanh.ui.HomeFragment
+import com.ute.cuuhotulanh.ui.home.HomeFragment
 import com.ute.cuuhotulanh.ui.RecipeDetailFragment
 import com.ute.cuuhotulanh.ui.RecipeListFragment
 
