@@ -1,6 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="16dp">
+
+    <!-- Thanh trên: nút back tròn bên trái, tiêu đề căn giữa -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_circle_white"
+            android:contentDescription="@string/back"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/dark" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="Gợi ý tìm món ăn"
+            android:textColor="@color/dark"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Banner xanh nhạt -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/banner_green"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="16dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                app:cardBackgroundColor="@color/green_dark"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/dark" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvResultCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Tìm thấy 18 món phù hợp"
+                    android:textColor="@color/dark"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvIngredientsSummary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Với trứng, cà chua, thịt cá,..."
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Hai nút lọc: viền tròn, rộng bằng nhau -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/chipFewIngredients"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="132dp"
+            android:layout_height="34dp"
+            android:checkable="true"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:maxLines="1"
+            android:padding="0dp"
+            android:text="Ít nguyên liệu nhất"
+            android:textAllCaps="false"
+            android:textColor="@color/chip_filter_text"
+            android:textSize="12sp"
+            app:backgroundTint="@color/chip_filter_bg"
+            app:cornerRadius="17dp"
+            app:strokeColor="@color/chip_filter_stroke"
+            app:strokeWidth="1.5dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/chipQuick"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="132dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="13dp"
+            android:checkable="true"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:maxLines="1"
+            android:padding="0dp"
+            android:text="Nấu nhanh"
+            android:textAllCaps="false"
+            android:textColor="@color/chip_filter_text"
+            android:textSize="12sp"
+            app:backgroundTint="@color/chip_filter_bg"
+            app:cornerRadius="17dp"
+            app:strokeColor="@color/chip_filter_stroke"
+            app:strokeWidth="1.5dp" />
+    </LinearLayout>
+
+    <!-- Danh sách món. Bọc FrameLayout để Thẻ 3 include layout_state vào đây -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="36dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp" />
+    </FrameLayout>
 
 </LinearLayout>
