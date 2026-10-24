@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="120dp">
+
+        <!-- Ảnh bên trái -->
+        <ImageView
+            android:id="@+id/imageRecipe"
+            android:layout_width="130dp"
+            android:layout_height="120dp"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_food"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Nút tim đỏ nổi chồng góc trên ảnh, mặc định ẩn -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardFavorite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="8dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@id/imageRecipe"
+            app:layout_constraintTop_toTopOf="@id/imageRecipe">
+
+            <ImageView
+                android:id="@+id/ivFavorite"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_heart_red" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Nội dung bên phải -->
+        <TextView
+            android:id="@+id/tvRecipeName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Trứng xào cà chua"
+            android:textColor="@color/gray_dark"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageRecipe"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:drawableStart="@drawable/ic_clock"
+            android:drawablePadding="4dp"
+            android:drawableTint="@color/gray_dark"
+            android:text="13 phút"
+            android:textColor="#888888"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvRecipeName"
+            app:layout_constraintTop_toBottomOf="@id/tvRecipeName" />
+
+        <!-- Đường kẻ mảnh, màu nhạt (không dùng @color/dark) -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/divider_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvRecipeName"
+            app:layout_constraintTop_toBottomOf="@id/tvTime" />
+
+        <!-- "Có 3 nguyên liệu": xanh + dấu tick -->
+        <TextView
+            android:id="@+id/tvIngredientStatusEnough"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableStart="@drawable/ic_check"
+            android:drawablePadding="6dp"
+            android:drawableTint="@color/green_dark"
+            android:text="Có 3 nguyên liệu"
+            android:textColor="@color/green_dark"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvRecipeName"
+            app:layout_constraintTop_toBottomOf="@id/divider" />
+
+        <!-- "Thiếu 1": cam + dấu + -->
+        <TextView
+            android:id="@+id/tvIngredientStatusMiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:drawableStart="@drawable/ic_add"
+            android:drawablePadding="6dp"
+            android:drawableTint="@color/orange"
+            android:text="Thiếu 1"
+            android:textColor="@color/orange"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvRecipeName"
+            app:layout_constraintTop_toBottomOf="@id/tvIngredientStatusEnough" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
