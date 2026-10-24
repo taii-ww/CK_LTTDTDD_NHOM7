@@ -15,10 +15,9 @@
         android:layout_height="wrap_content"
         android:minHeight="120dp">
 
-        <!-- Ảnh bên trái -->
         <ImageView
             android:id="@+id/imageRecipe"
-            android:layout_width="130dp"
+            android:layout_width="132dp"
             android:layout_height="120dp"
             android:contentDescription="@null"
             android:scaleType="centerCrop"
@@ -26,12 +25,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Nút tim đỏ nổi chồng góc trên ảnh, mặc định ẩn -->
+        <!-- Nút tim đỏ nổi góc trên phải của ảnh, mặc định ẩn -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardFavorite"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_margin="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="6dp"
             android:visibility="gone"
             tools:visibility="visible"
             app:cardBackgroundColor="@color/white"
@@ -42,19 +42,18 @@
 
             <ImageView
                 android:id="@+id/ivFavorite"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
                 android:layout_gravity="center"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_heart_red" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Nội dung bên phải -->
         <TextView
             android:id="@+id/tvRecipeName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             android:ellipsize="end"
@@ -81,24 +80,23 @@
             app:layout_constraintStart_toStartOf="@id/tvRecipeName"
             app:layout_constraintTop_toBottomOf="@id/tvRecipeName" />
 
-        <!-- Đường kẻ mảnh, màu nhạt (không dùng @color/dark) -->
+        <!-- Đường kẻ mảnh, màu nhạt theo thẻ Trello -->
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
             android:background="@color/divider_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tvRecipeName"
             app:layout_constraintTop_toBottomOf="@id/tvTime" />
 
-        <!-- "Có 3 nguyên liệu": xanh + dấu tick -->
         <TextView
             android:id="@+id/tvIngredientStatusEnough"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="6dp"
             android:drawableStart="@drawable/ic_check"
             android:drawablePadding="6dp"
             android:drawableTint="@color/green_dark"
@@ -109,7 +107,6 @@
             app:layout_constraintStart_toStartOf="@id/tvRecipeName"
             app:layout_constraintTop_toBottomOf="@id/divider" />
 
-        <!-- "Thiếu 1": cam + dấu + -->
         <TextView
             android:id="@+id/tvIngredientStatusMiss"
             android:layout_width="wrap_content"
