@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cây nhỏ trong chậu: icon ở banner màn Món yêu thích (icon nhiều màu, không tint) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Lá trái -->
+    <path
+        android:fillColor="#2F8F46"
+        android:pathData="M12,14.5C12,10.5 9.5,7.8 4.5,7.8c0,4.2 2.6,6.7 7.5,6.7z" />
+    <!-- Lá phải -->
+    <path
+        android:fillColor="#4CAF62"
+        android:pathData="M12.4,12.5c0,-3.8 2.1,-6.5 7.1,-6.5 0,3.9 -2.2,6.5 -7.1,6.5z" />
+    <!-- Thân -->
+    <path
+        android:fillColor="#2F8F46"
+        android:pathData="M11.3,14h1.4v2.2h-1.4z" />
+    <!-- Chậu -->
+    <path
+        android:fillColor="#E4572E"
+        android:pathData="M6.5,16h11l-1.3,5.2c-0.1,0.5 -0.5,0.8 -1,0.8H8.8c-0.5,0 -0.9,-0.3 -1,-0.8z" />
+    <path
+        android:fillColor="#C94623"
+        android:pathData="M6,15.2h12c0.4,0 0.7,0.3 0.7,0.7v0.1c0,0.4 -0.3,0.7 -0.7,0.7H6c-0.4,0 -0.7,-0.3 -0.7,-0.7v-0.1c0,-0.4 0.3,-0.7 0.7,-0.7z" />
+</vector>
