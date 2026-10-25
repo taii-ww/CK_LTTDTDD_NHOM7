@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ô vuông bo góc xanh nhạt: dấu tick nguyên liệu đang có -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/green_light" />
+    <corners android:radius="7dp" />
+</shape>

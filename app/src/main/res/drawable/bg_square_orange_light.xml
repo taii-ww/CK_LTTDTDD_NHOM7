@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ô vuông bo góc cam nhạt: dấu + nguyên liệu còn thiếu -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FFEBDD" />
+    <corners android:radius="7dp" />
+</shape>
