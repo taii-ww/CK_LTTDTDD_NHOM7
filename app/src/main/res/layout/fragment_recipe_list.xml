@@ -148,7 +148,7 @@
             app:strokeWidth="1.5dp" />
     </LinearLayout>
 
-    <!-- Danh sách món. Bọc FrameLayout để Thẻ 3 include layout_state vào đây -->
+    <!-- Danh sách món + các trạng thái loading / rỗng / lỗi (layout_state) -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -161,6 +161,11 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingBottom="16dp" />
+
+        <include
+            layout="@layout/layout_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 
 </LinearLayout>
