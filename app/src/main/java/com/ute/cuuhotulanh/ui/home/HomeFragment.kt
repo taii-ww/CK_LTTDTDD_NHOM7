@@ -2,15 +2,20 @@ package com.ute.cuuhotulanh.ui.home
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.ute.cuuhotulanh.MainActivity
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.ute.cuuhotulanh.R
 import com.ute.cuuhotulanh.model.Recipe
 import com.ute.cuuhotulanh.ui.RecipeDetailFragment
 import com.ute.cuuhotulanh.ui.RecipeListFragment
 
-class HomeFragment : Fragment(R.layout.fragment_home){
+class HomeFragment : Fragment(R.layout.fragment_home) {
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val listRecipe: List<Recipe> = listOf(
@@ -47,12 +52,63 @@ class HomeFragment : Fragment(R.layout.fragment_home){
                 "Có 3 nguyên liệu"
             ),
         )
-        val adapter = RecipeAdapter(listRecipe){ selectedId ->
+        val adapter = RecipeAdapter(listRecipe) { selectedId ->
             navigateToRecipeDetail(selectedId)
         }
         view.findViewById<RecyclerView>(R.id.rvSuggestions).adapter = adapter
+
+        setupIngredientInput(view)
+
+        // Nút "Tìm món ăn": chuyển sang màn Gợi ý tìm món ăn, kèm danh sách nguyên liệu
+        view.findViewById<View>(R.id.btnSearch).setOnClickListener {
+            navigateToRecipeList(getIngredients(view))
+        }
     }
-    private fun navigateToRecipeDetail(id : Int){
+
+    /** Gõ tên nguyên liệu rồi bấm dấu "+" (hoặc phím Done) để thêm thành chip; bấm X trên chip để xóa. */
+    private fun setupIngredientInput(view: View) {
+        val inputLayout = view.findViewById<TextInputLayout>(R.id.textInputLayoutIngredients)
+        val editText = view.findViewById<TextInputEditText>(R.id.editTextIngredients)
+        val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroupIngredients)
+
+        fun addChip() {
+            val name = editText.text?.toString()?.trim().orEmpty()
+            if (name.isEmpty()) return
+
+            val exists = (0 until chipGroup.childCount).any {
+                (chipGroup.getChildAt(it) as Chip).text.toString().equals(name, ignoreCase = true)
+            }
+            if (!exists) {
+                val chip = Chip(requireContext()).apply {
+                    text = name
+                    isCloseIconVisible = true
+                    setOnCloseIconClickListener { chipGroup.removeView(this) }
+                }
+                chipGroup.addView(chip)
+            }
+            editText.text?.clear()
+        }
+
+        inputLayout.setEndIconOnClickListener { addChip() }
+        editText.imeOptions = EditorInfo.IME_ACTION_DONE
+        editText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addChip()
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    private fun getIngredients(view: View): List<String> {
+        val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroupIngredients)
+        return (0 until chipGroup.childCount).map {
+            (chipGroup.getChildAt(it) as Chip).text.toString()
+        }
+    }
+
+    private fun navigateToRecipeDetail(id: Int) {
         val fragment = RecipeDetailFragment()
 
         val bundle = Bundle()
@@ -64,7 +120,8 @@ class HomeFragment : Fragment(R.layout.fragment_home){
             .addToBackStack(null)
             .commit()
     }
-    private fun navigateToRecipeList(ingredients : List<String>){
+
+    private fun navigateToRecipeList(ingredients: List<String>) {
         val fragment = RecipeListFragment()
 
         val bundle = Bundle()
