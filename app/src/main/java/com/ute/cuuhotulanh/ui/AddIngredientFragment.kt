@@ -12,14 +12,18 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.ute.cuuhotulanh.R
+import com.ute.cuuhotulanh.databinding.FragmentAddIngredientBinding
 import java.util.Calendar
 
 class AddIngredientFragment : Fragment(R.layout.fragment_add_ingredient) {
 
     private var selectedCategory: String = "Rau củ"
+    private lateinit var binding: FragmentAddIngredientBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAddIngredientBinding.bind(view)
+
 
         val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
         val etIngredientName = view.findViewById<TextInputEditText>(R.id.etIngredientName)
@@ -98,6 +102,11 @@ class AddIngredientFragment : Fragment(R.layout.fragment_add_ingredient) {
             val isSelected = categoryName == selectedCategory
 
             button.isSelected = isSelected
+            if (isSelected) {
+                val copiedIcon = button.icon?.constantState?.newDrawable()?.mutate()
+                binding.ivIngredientPreview.setImageDrawable(copiedIcon)
+                binding.ivIngredientPreview.imageTintList = null
+            }
             button.setBackgroundTintList(
                 ContextCompat.getColorStateList(
                     requireContext(),
