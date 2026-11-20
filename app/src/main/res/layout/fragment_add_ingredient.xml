@@ -8,8 +8,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:paddingBottom="88dp">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -186,11 +185,16 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_columnWeight="1"
-                    android:text="🥬\nRau củ"
+                    android:textAllCaps="false"
+                    android:text="Rau củ"
                     android:textSize="11sp"
                     android:gravity="center"
                     android:textColor="@color/gray_dark"
+                    app:icon="@drawable/img_vegetable"
+                    app:iconTint="@null"
                     app:strokeColor="@color/gray_light"
                     app:cornerRadius="12dp" />
 
@@ -199,11 +203,16 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_columnWeight="1"
-                    android:text="🥩\nThịt"
+                    android:text="Thịt"
                     android:textSize="11sp"
                     android:gravity="center"
+                    android:textAllCaps="false"
                     android:textColor="@color/gray_dark"
+                    app:icon="@drawable/img_meat"
+                    app:iconTint="@null"
                     app:strokeColor="@color/gray_light"
                     app:cornerRadius="12dp" />
 
@@ -212,11 +221,16 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_columnWeight="1"
-                    android:text="💧\nNước"
+                    android:text="Nước"
                     android:textSize="11sp"
                     android:gravity="center"
                     android:textColor="@color/gray_dark"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/img_milk"
+                    app:iconTint="@null"
                     app:strokeColor="@color/gray_light"
                     app:cornerRadius="12dp" />
 
@@ -225,11 +239,16 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_columnWeight="1"
-                    android:text="🥚\nTrứng"
+                    android:text="Trứng"
                     android:textSize="11sp"
                     android:gravity="center"
+                    android:textAllCaps="false"
                     android:textColor="@color/gray_dark"
+                    app:icon="@drawable/img_egg"
+                    app:iconTint="@null"
                     app:strokeColor="@color/gray_light"
                     app:cornerRadius="12dp" />
 
@@ -238,11 +257,16 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_columnWeight="1"
-                    android:text="🍉\nTrái cây"
+                    android:text="Trái cây"
                     android:textSize="11sp"
                     android:gravity="center"
                     android:textColor="@color/gray_dark"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/img_fruit"
+                    app:iconTint="@null"
                     app:strokeColor="@color/gray_light"
                     app:cornerRadius="12dp" />
 
@@ -251,11 +275,16 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_columnWeight="1"
-                    android:text="🐟\nCá"
+                    android:text="Cá"
                     android:textSize="11sp"
                     android:gravity="center"
                     android:textColor="@color/gray_dark"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/img_fish"
+                    app:iconTint="@null"
                     app:strokeColor="@color/gray_light"
                     app:cornerRadius="12dp" />
 
@@ -264,11 +293,16 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_columnWeight="1"
-                    android:text="🥨\nĐồ khô"
+                    android:text="Đồ khô"
                     android:textSize="11sp"
                     android:gravity="center"
                     android:textColor="@color/gray_dark"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/img_dried_goods"
+                    app:iconTint="@null"
                     app:strokeColor="@color/gray_light"
                     app:cornerRadius="12dp" />
 
@@ -277,11 +311,16 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_columnWeight="1"
-                    android:text="🧺\nKhác"
+                    android:text="Khác"
                     android:textSize="11sp"
                     android:gravity="center"
                     android:textColor="@color/gray_dark"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/img_other"
+                    app:iconTint="@null"
                     app:strokeColor="@color/gray_light"
                     app:cornerRadius="12dp" />
             </GridLayout>
@@ -307,20 +346,21 @@
                     android:inputType="textMultiLine"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveIngredient"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="✓ Lưu nguyên liệu"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:backgroundTint="@color/green_dark"
+                app:cornerRadius="16dp" />
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSaveIngredient"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="16dp"
-        android:text="✓ Lưu nguyên liệu"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:backgroundTint="@color/green_dark"
-        app:cornerRadius="16dp" />
 </FrameLayout>

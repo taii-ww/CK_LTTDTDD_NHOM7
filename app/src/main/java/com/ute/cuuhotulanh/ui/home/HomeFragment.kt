@@ -10,13 +10,16 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.ute.cuuhotulanh.R
+import com.ute.cuuhotulanh.databinding.FragmentHomeBinding
 import com.ute.cuuhotulanh.model.Recipe
 import com.ute.cuuhotulanh.ui.RecipeDetailFragment
 import com.ute.cuuhotulanh.ui.RecipeListFragment
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
+    private lateinit var binding: FragmentHomeBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding = FragmentHomeBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
         val listRecipe: List<Recipe> = listOf(
             Recipe(
@@ -55,21 +58,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val adapter = RecipeAdapter(listRecipe) { selectedId ->
             navigateToRecipeDetail(selectedId)
         }
-        view.findViewById<RecyclerView>(R.id.rvSuggestions).adapter = adapter
+        binding.rvSuggestions.adapter = adapter
 
         setupIngredientInput(view)
-
-        // Nút "Tìm món ăn": chuyển sang màn Gợi ý tìm món ăn, kèm danh sách nguyên liệu
-        view.findViewById<View>(R.id.btnSearch).setOnClickListener {
+        binding.btnSearch.setOnClickListener {
             navigateToRecipeList(getIngredients(view))
         }
     }
 
-    /** Gõ tên nguyên liệu rồi bấm dấu "+" (hoặc phím Done) để thêm thành chip; bấm X trên chip để xóa. */
     private fun setupIngredientInput(view: View) {
-        val inputLayout = view.findViewById<TextInputLayout>(R.id.textInputLayoutIngredients)
-        val editText = view.findViewById<TextInputEditText>(R.id.editTextIngredients)
-        val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroupIngredients)
+        val inputLayout = binding.textInputLayoutIngredients
+        val editText = binding.editTextIngredients
+        val chipGroup = binding.chipGroupIngredients
 
         fun addChip() {
             val name = editText.text?.toString()?.trim().orEmpty()
@@ -102,7 +102,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun getIngredients(view: View): List<String> {
-        val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroupIngredients)
+        val chipGroup = binding.chipGroupIngredients
         return (0 until chipGroup.childCount).map {
             (chipGroup.getChildAt(it) as Chip).text.toString()
         }

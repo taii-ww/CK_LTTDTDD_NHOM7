@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
@@ -28,10 +29,11 @@
 
             <ImageView
                 android:id="@+id/ivIngredientIcon"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:src="@drawable/img_food"
+                android:padding="5dp"
+                android:src="@drawable/img_tomato"
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/ingredient_icon" />
         </com.google.android.material.card.MaterialCardView>
@@ -49,34 +51,37 @@
             app:layout_constraintEnd_toStartOf="@id/ivArrow"
             app:layout_constraintTop_toTopOf="@id/ingredientIconContainer" />
 
-        <TextView
-            android:id="@+id/tvIngredientMeta"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="2dp"
-            android:text="3 quả · Còn 5 ngày"
-            android:textSize="12sp"
-            android:textColor="@color/text_secondary"
-            app:layout_constraintStart_toEndOf="@id/ingredientIconContainer"
-            app:layout_constraintEnd_toStartOf="@id/ivArrow"
-            app:layout_constraintTop_toBottomOf="@id/tvIngredientName" />
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/ingredientIconContainer"
+            app:layout_constraintStart_toEndOf="@+id/ingredientIconContainer"
+            app:layout_constraintTop_toBottomOf="@+id/tvIngredientName">
+            <TextView
+                android:id="@+id/tvIngredientMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:text="3 quả · Còn 5 ngày"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"/>
 
-        <TextView
-            android:id="@+id/tvUseSoon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="5dp"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="3dp"
-            android:text="Nên dùng sớm"
-            android:textSize="10sp"
-            android:textColor="@color/orange"
-            android:background="@drawable/bg_orange_tag"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@id/ingredientIconContainer"
-            app:layout_constraintTop_toBottomOf="@id/tvIngredientMeta" />
+            <TextView
+                android:id="@+id/tvUseSoon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="5dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="Nên dùng sớm"
+                android:textSize="10sp"
+                android:textColor="@color/orange"
+                android:background="@drawable/bg_orange_tag"
+                android:visibility="visible" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/ivArrow"

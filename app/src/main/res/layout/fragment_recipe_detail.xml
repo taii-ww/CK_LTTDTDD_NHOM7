@@ -490,7 +490,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Nút back (giữ id btnBack) -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardBack"
             android:layout_width="36dp"
@@ -514,7 +513,6 @@
                 app:tint="@color/dark" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Nút tim nổi trên ảnh -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardFavorite"
             android:layout_width="36dp"
