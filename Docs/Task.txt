@@ -1,0 +1,367 @@
+╔══════════════════════════════════════════════════════════════════╗
+║  PHÂN TASK DỰ ÁN "CỨU HỘ TỦ LẠNH"                                ║
+║  Từ Sprint 1 → Sprint 2 → Backlog → Nghiệm thu cuối dự án        ║
+
+╚══════════════════════════════════════════════════════════════════╝
+
+============================================================
+
+============================================================
+
+
+  + Tài  : Kết nối API Spoonacular (Sprint 1)
+           + Nối API vào màn Danh sách món (Sprint 2)
+           + Màn Chi tiết món ăn (Sprint 2)
+  + Khoa : Nền móng dự án & Room cho tủ lạnh (Sprint 1)
+           + Nguyên liệu lưu thật, sửa và xóa (Sprint 2)
+           + Màn Yêu thích chạy thật (Sprint 2)
+  + Phát : Regex & Validation "Thêm nguyên liệu" (Sprint 1)
+           + Từ điển Việt–Anh cho nguyên liệu (Sprint 2)
+           + Home và bộ lọc dùng lambda (Sprint 2)
+- Đã bỏ khỏi backlog: "Thông báo hết hạn (WorkManager)".
+- Nguyên tắc: mỗi người giữ trọn một mảng (API / Room+Local / Regex+Validation).
+
+============================================================
+1. THÔNG TIN CHUNG
+============================================================
+- Dự án       : Cứu Hộ Tủ Lạnh (Leftover Recipe Finder)
+- Nhóm        : 07 — Lớp 126LTTD03
+- Thành viên  : Tài, Khoa, Phát
+- Nền tảng    : Android, Kotlin + XML Layout
+- Repo       : GitHub (public — KHÔNG commit API key)
+- Công cụ     : Android Studio, Gradle (Kotlin DSL), Git
+
+============================================================
+2. QUY ƯỚC LÀM VIỆC
+============================================================
+2.1. Branch
+- Mỗi người một branch riêng theo tên task:
+    Tài  : feature/tai-api, feature/tai-list, feature/tai-detail
+    Khoa : feature/khoa-room, feature/khoa-ingredient-crud, feature/khoa-favorite
+    Phát : feature/phat-validation, feature/phat-dictionary, feature/phat-filter
+- Merge vào nhánh chính khi card hoàn thành + đã test.
+
+2.2. API key
+- Lưu trong local.properties (không commit).
+- Đọc qua BuildConfig.
+- Ghi hạn mức / endpoint đã dùng vào README.
+
+2.3. build.gradle
+- Cả Tài và Khoa đều thêm thư viện → dễ xung đột.
+- Thống nhất: MỘT người thêm toàn bộ dependency trong 1 commit nhỏ,
+  merge vào nhánh chính NGAY, rồi mới tách branch riêng.
+- Phân công cụ thể:
+    Khoa thêm: Room, Coroutines, ViewModel/LiveData, Glide.
+    Tài thêm : Retrofit, Gson converter, OkHttp logging.
+    → Khoa commit trước (vì model + Room là nền), Tài rebase theo.
+
+2.4. README
+- Khi xong mỗi card, mỗi người ghi vài dòng vào README:
+  tên hàm Repository, kiểu dữ liệu trả về, cách dùng.
+- Mục đích: người nhận task không phải đọc lại code để đoán.
+
+2.5. Commit message
+- Format: [Card-ID] Mô tả ngắn
+- Ví dụ: [K2-S1] Thêm Retrofit service findByIngredients
+
+============================================================
+3. SPRINT 1 — NỀN MÓNG
+============================================================
+Mục tiêu sprint: tủ lạnh lưu dữ liệu thật, gọi được API ra kết quả
+thật, ô nhập nguyên liệu có Regex + Validation. Ba việc chạy song song
+được, không đụng file của nhau (trừ build.gradle — xem 2.3).
+
+------------------------------------------------------------
+📌 TÀI — KẾT NỐI API SPOONACULAR
+Branch: feature/tai-api
+------------------------------------------------------------
+[ ] Đăng ký key, xem hạn mức thật trên dashboard, ghi vào README.
+    Lưu key trong local.properties, đọc qua BuildConfig,
+    KHÔNG commit key lên GitHub.
+[ ] Thêm quyền INTERNET trong AndroidManifest.
+    Tạo Retrofit service cho 2 endpoint:
+      - findByIngredients
+      - recipes/{id}/information
+[ ] Tạo các lớp DTO để hứng JSON trả về.
+[ ] Viết RecipeRepository, gọi thử với danh sách cứng
+    (egg, tomato), in kết quả ra Logcat để xác nhận API OK.
+[ ] Sau khi Khoa push model Recipe:
+    Chuyển DTO → Recipe.
+    Số "có"  lấy từ usedIngredientCount.
+    Số "thiếu" lấy từ missedIngredientCount.
+    (Không dùng chuỗi "Có 3 nguyên liệu" / "Thiếu 1" nữa.)
+
+------------------------------------------------------------
+📌 KHOA — NỀN MÓNG DỰ ÁN & ROOM CHO TỦ LẠNH
+Branch: feature/khoa-room
+------------------------------------------------------------
+[ ] Thiết kế lại Ingredient:
+      id, name, quantity, unit, category, expiryDate (dạng ngày thật).
+    Thiết kế lại Recipe:
+      số nguyên liệu có/thiếu dạng Int, không dùng chuỗi.
+    → Push việc này ĐẦU TIÊN (trong 1–2 ngày đầu) để Tài và Phát dùng.
+[ ] Thêm thư viện: Room, Coroutines, ViewModel/LiveData, Glide.
+    (Retrofit + Gson do Tài thêm — phối hợp để không trùng khi merge
+    build.gradle, xem mục 2.3.)
+[ ] Tạo Room: Entity, DAO, Database, FridgeRepository.
+[ ] FridgeFragment đọc danh sách từ Room qua ViewModel,
+    bỏ danh sách giả hard-code.
+[ ] Tính "Nên dùng sớm" từ ngày hết hạn (còn ≤ 3 ngày),
+    bỏ boolean gán cứng.
+
+------------------------------------------------------------
+📌 PHÁT — REGEX & VALIDATION CHO "THÊM NGUYÊN LIỆU"
+Branch: feature/phat-validation
+------------------------------------------------------------
+[ ] Tạo util/IngredientParser.kt — Kotlin thuần, KHÔNG phụ thuộc
+    Android để dễ test. Dùng Regex tách chuỗi nhập nhanh:
+      "3 quả trứng"   → (3, "quả",  "trứng")
+      "350g thịt gà"  → (350, "g",   "thịt gà")
+[ ] Tạo util/Validators.kt với các rule dạng lambda:
+      val rules: List<(String) -> String?>
+    Trả về thông báo lỗi hoặc null nếu hợp lệ.
+    Gồm:
+      - Tên: chỉ có chữ, 2–50 ký tự.
+      - Số lượng > 0.
+      - Ngày đúng dd/MM/yyyy và không ở quá khứ.
+[ ] Gắn vào AddIngredientFragment:
+    Hiện lỗi ngay dưới ô nhập bằng TextInputLayout.error,
+    thay cho Toast chung chung.
+[ ] Viết unit test cho Parser và Validators:
+    Ít nhất 10 trường hợp, gồm cả trường hợp sai.
+[ ] Chưa lưu vào DB — để lại // TODO để Khoa nối sau (card Khoa 2).
+
+============================================================
+4. SPRINT 2 — TÍNH NĂNG CHÍNH
+============================================================
+Mỗi người thêm 2 card. Thứ tự phụ thuộc xem mục 6.
+
+------------------------------------------------------------
+📌 TÀI 2 — NỐI API VÀO MÀN DANH SÁCH MÓN
+Branch: feature/tai-list
+------------------------------------------------------------
+[ ] RecipeListFragment nhận danh sách nguyên liệu từ Home,
+    đưa qua ViewModel → Repository → gọi API.
+[ ] Gắn 4 trạng thái StateLayout với dữ liệu thật:
+      LOADING : đang gọi API.
+      ERROR   : mất mạng hoặc hết quota.
+      EMPTY   : không có món phù hợp.
+      Nút "Thử lại" gọi lại API.
+[ ] Dùng Glide để hiện ảnh món, thay R.drawable.img_food.
+[ ] Giữ 2 bộ lọc hiện có, chạy trên dữ liệu thật:
+      "Ít nguyên liệu nhất" + "Nấu nhanh".
+    LƯU Ý: findByIngredients có thể không trả thời gian nấu.
+    Kiểm tra docs xem endpoint nào trả readyInMinutes
+    (vd complexSearch kèm thông tin món).
+    Ghi lại phương án đã chọn + chi phí điểm vào README.
+[ ] Cache kết quả theo danh sách nguyên liệu
+    để tiết kiệm quota khi test.
+
+------------------------------------------------------------
+📌 TÀI 3 — MÀN CHI TIẾT MÓN ĂN
+Branch: feature/tai-detail
+------------------------------------------------------------
+[ ] RecipeDetailFragment đọc id từ arguments và gọi API lấy chi tiết.
+[ ] Hiện tên, ảnh, thời gian, khẩu phần.
+[ ] Hiện danh sách "Nguyên liệu bạn đang có" và
+    "Nguyên liệu còn thiếu" bằng cách so với tủ lạnh trong Room.
+    → Phụ thuộc: Khoa xong card Sprint 1 (Room + model).
+[ ] Hiện các bước nấu. Dùng Regex xóa thẻ HTML
+    (<b>, <li>, <ol>...) trong mô tả và hướng dẫn.
+[ ] Thêm trạng thái loading và lỗi cho màn này.
+
+------------------------------------------------------------
+📌 KHOA 2 — NGUYÊN LIỆU LƯU THẬT, SỬA VÀ XÓA ĐƯỢC
+Branch: feature/khoa-ingredient-crud
+------------------------------------------------------------
+[ ] Nối nút Lưu của AddIngredientFragment vào Room
+    (sau khi Phát gắn xong validation — card Phát Sprint 1),
+    lưu đầy đủ cả danh mục.
+[ ] Nếu trùng tên nguyên liệu → cộng dồn số lượng,
+    KHÔNG tạo dòng mới.
+[ ] Trong FridgeFragment:
+      - Thêm xóa nguyên liệu (vuốt hoặc nhấn giữ).
+      - Sửa số lượng.
+[ ] Sắp xếp danh sách tủ lạnh theo hạn dùng bằng lambda (sortedBy),
+    món sắp hết hạn lên đầu.
+[ ] Hiện trạng thái rỗng bằng StateLayout khi tủ lạnh chưa có gì.
+
+------------------------------------------------------------
+📌 KHOA 3 — MÀN YÊU THÍCH CHẠY THẬT
+Branch: feature/khoa-favorite
+------------------------------------------------------------
+[ ] Tạo FavoriteEntity (recipeId, tên, ảnh, thời gian),
+    DAO và FavoriteRepository.
+[ ] Nút tim ở màn Danh sách món và màn Chi tiết:
+    bấm để thêm/bỏ yêu thích, tim đổi màu theo trạng thái.
+    → Phối hợp với Tài: Tài làm xong màn, Khoa gắn tim
+      (hoặc Khoa cung cấp FavoriteRepository, Tài tự gắn).
+[ ] FavoritesFragment đọc từ Room,
+    bỏ FakeData.recipes().take(3) và khối DEBUG.
+[ ] Kiểm tra trạng thái rỗng "Chưa có món yêu thích" hiện đúng.
+
+------------------------------------------------------------
+📌 PHÁT 2 — TỪ ĐIỂN VIỆT–ANH CHO NGUYÊN LIỆU
+Branch: feature/phat-dictionary
+------------------------------------------------------------
+[ ] Tạo file JSON trong assets với khoảng 100–150 nguyên liệu
+    phổ biến (trứng → egg, cà chua → tomato, thịt gà → chicken...).
+[ ] Viết hàm chuẩn hóa tên bằng Regex:
+      - Bỏ dấu tiếng Việt.
+      - Đưa về chữ thường.
+      - Xóa khoảng trắng thừa.
+      - Bỏ các từ đơn vị như "quả", "củ", "bó".
+[ ] Viết IngredientTranslator.translate(name): String?
+    Trả về null nếu không có trong từ điển.
+[ ] Unit test các trường hợp:
+      có dấu, không dấu, viết hoa, khoảng trắng thừa.
+[ ] Gợi ý từ khi gõ ở ô nhập nguyên liệu trên Home (AutoComplete).
+
+------------------------------------------------------------
+📌 PHÁT 3 — HOME VÀ BỘ LỌC DÙNG LAMBDA
+Branch: feature/phat-filter
+------------------------------------------------------------
+[ ] Validation cho chip trên Home:
+      - Không rỗng.
+      - Tối đa 15 nguyên liệu.
+      - Báo lỗi nếu không có trong từ điển.
+[ ] Nối nút "+ Thêm nguyên liệu vào tủ" trên Home
+    để mở AddIngredientFragment.
+[ ] Tạo RecipeFilters.kt chứa các bộ lọc dạng lambda
+    (Recipe) -> Boolean:
+      - Nấu nhanh.
+      - Đủ nguyên liệu.
+      - Thiếu tối đa N nguyên liệu.
+    Gộp bằng all { }.
+[ ] Viết lại applyFilters() của RecipeListFragment
+    dùng danh sách bộ lọc này,
+    bỏ hàm missingCount() đọc số từ chuỗi.
+    → Phối hợp với Tài (Tài đang giữ RecipeListFragment).
+[ ] Thêm chip lọc "Dùng nguyên liệu sắp hết hạn".
+    → Phụ thuộc: Khoa xong card Sprint 1 (Room + model).
+
+============================================================
+5. BACKLOG CÒN LẠI (chưa giao — làm sau Sprint 2)
+============================================================
+[ ] Danh sách "Gợi ý hôm nay" trên Home dùng dữ liệu thật.
+[ ] Dọn code:
+      - Xóa khối DEBUG.
+      - Đưa chuỗi vào strings.xml.
+      - Gộp 2 adapter món ăn.
+[ ] README hoàn chỉnh, kịch bản demo, báo cáo cuối kỳ.
+[ ] Quét nguyên liệu (làm CUỐI CÙNG, không bắt buộc).
+
+ĐÃ BỎ khỏi backlog: Thông báo hết hạn (WorkManager).
+
+============================================================
+6. THỨ TỰ PHỤ THUỘC GIỮA CÁC CARD
+============================================================
+Sprint 1 — 3 card chạy SONG SONG, không chặn nhau
+(khi merge build.gradle thì làm theo mục 2.3).
+
+Sau Sprint 1:
+- Khoa 2  cần Phát (Sprint 1) — validation xong mới nối Lưu.
+- Tài 3   cần Khoa (Sprint 1) — Room + model xong mới so "có/thiếu".
+- Phát 3  cần Khoa (Sprint 1) — Room + model xong mới làm chip
+           "Dùng nguyên liệu sắp hết hạn".
+- Tài 2   cần Phát 2 — từ điển Việt–Anh xong mới dịch nguyên liệu
+           trước khi gọi API.
+- Khoa 3  phụ thuộc Tài 2 + Tài 3 (màn đã có chỗ gắn tim).
+
+Thứ tự gợi ý:
+  Sprint 1 → Phát 2 → Khoa 2 → Tài 2 → Tài 3 → Khoa 3 → Phát 3.
+(Có thể đảo Tài 3 và Khoa 2 nếu muốn song song.)
+
+============================================================
+7. LƯU Ý PHỐI HỢP — TRÁNH XUNG ĐỘT
+============================================================
+7.1. build.gradle
+- Một người thêm TOÀN BỘ dependency trong 1 commit nhỏ, merge ngay.
+- Khoa thêm Room/Coroutines/ViewModel/LiveData/Glide.
+- Tài thêm Retrofit/Gson/OkHttp.
+- Người còn lại rebase theo, không tự thêm trùng.
+
+7.2. RecipeListFragment & RecipeDetailFragment
+- Tài làm UI + logic API cho 2 màn này.
+- Khoa làm logic Yêu thích (FavoriteRepository).
+- Cách tránh xung đột:
+    + Tài làm xong màn → merge.
+    + Khoa mới gắn tim vào (hoặc Khoa chỉ cung cấp Repository,
+      Tài tự gắn trong màn của mình).
+- Thống nhất bằng tin nhắn trước khi sửa cùng file.
+
+7.3. RecipeListFragment — applyFilters()
+- Phát 3 viết lại applyFilters() dùng RecipeFilters.kt.
+- Tài 2 cũng sửa RecipeListFragment để gắn API + StateLayout.
+- Cách tránh xung đột:
+    + Tài 2 xong trước (màn chạy API thật) → merge.
+    + Phát 3 mới thay applyFilters() + thêm chip lọc.
+    + Hoặc Phát cung cấp RecipeFilters.kt, Tài tự gọi trong màn.
+
+7.4. Model Recipe / Ingredient
+- Khoa push model ĐẦU TIÊN (1–2 ngày đầu Sprint 1).
+- Tài + Phát rebase theo, không tự sửa model khi chưa báo Khoa.
+
+7.5. API key
+- Tài giữ key, ghi hạn mức vào README.
+- Nếu Khoa/Phát cần test API → xin key qua kênh riêng, không commit.
+
+============================================================
+8. DEFINITION OF DONE (DoD) — MỖI CARD
+============================================================
+Một card được coi là XONG khi:
+[ ] Code chạy được, không crash.
+[ ] Đã test tay các trường hợp chính + trường hợp biên.
+[ ] Có unit test (với card yêu cầu test: Phát 1, Phát 2).
+[ ] Đã merge vào nhánh chính.
+[ ] Đã ghi vài dòng vào README (tên hàm Repository, kiểu trả về).
+[ ] Không còn khối DEBUG / hard-code trong phần mình làm.
+[ ] Đã báo cho người phụ thuộc (nếu card của mình là đầu vào
+    của card người khác).
+
+============================================================
+9. TIMELINE GỢI Ý
+============================================================
+- Sprint 1        : 1 tuần (3 card song song).
+- Sprint 2        : 1.5 – 2 tuần (6 card, có phụ thuộc).
+- Backlog + dọn dẹp + README + demo + báo cáo : 1 tuần.
+- Tổng dự kiến    : 3.5 – 4 tuần.
+
+Mốc kiểm tra:
+- Cuối Sprint 1: họp 15 phút, demo 3 card, xác nhận model + API + validation OK.
+- Giữa Sprint 2: họp 15 phút, kiểm tra phụ thuộc (Phát 2 → Tài 2 → Tài 3 → Khoa 3).
+- Cuối Sprint 2: demo toàn bộ luồng Home → Danh sách → Chi tiết → Yêu thích.
+
+============================================================
+10. NGHIỆM THU CUỐI DỰ ÁN (ACCEPTANCE)
+============================================================
+Chạy toàn bộ test case ở Phần A (mục XII) — khoảng 75 TC phủ 18 chức năng.
+Ghi kết quả PASS/FAIL vào Phần B (file cập nhật riêng).
+
+Điều kiện nghiệm thu tổng:
+[ ] Tất cả TC nhóm F01–F18 PASS (hoặc có ghi chú lý do FAIL).
+[ ] Không còn crash khi demo luồng chính.
+[ ] Không còn hard-code / FakeData trong luồng chính.
+[ ] API key không bị lộ trên GitHub.
+[ ] README đầy đủ: cách chạy, cách cấu hình key, kiến trúc tóm tắt.
+[ ] Video demo quay đủ 6 màn hình + luồng chính.
+[ ] Báo cáo cuối kỳ hoàn chỉnh.
+[ ] Slide thuyết trình hoàn chỉnh.
+
+============================================================
+11. TÓM TẮT NHANH
+============================================================
+- Sprint 1: Tài (API) — Khoa (Room) — Phát (Validation).
+- Sprint 2: Tài (List API + Detail) — Khoa (Ingredient CRUD + Favorite)
+            — Phát (Dictionary + Filter).
+- Backlog : Gợi ý hôm nay thật, dọn code, README/demo/báo cáo,
+            quét nguyên liệu (cuối, không bắt buộc).
+- Đã bỏ   : Thông báo hết hạn (WorkManager).
+- Xung đột cần né: build.gradle, RecipeListFragment, RecipeDetailFragment,
+                   model Recipe/Ingredient.
+- DoD     : code chạy + test + merge + README + không DEBUG.
+- Nghiệm thu: chạy ~75 TC ở Phần A, ghi kết quả vào Phần B.
+
+============================================================
+HẾT FILE PHÂN TASK
+============================================================
